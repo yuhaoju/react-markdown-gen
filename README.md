@@ -4,15 +4,16 @@ use [react-docgen](https://github.com/reactjs/react-docgen/) extract information
 ## Install
 
 ```
-npm install -g react-docgen
+npm install -g react-markdown-gen
 ```
 
 ##Usage: 
 ```
-rmd <component_name> <input_file> <output_file>
+rmd <component_name> <input_file> [output_file]
 ```
 
 ##example
 ```
 rmd Calendar index.js readme.md
 ```
+If no output file exists, information will be printed out on your terminal.
