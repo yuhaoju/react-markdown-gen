@@ -1,5 +1,5 @@
 # react-markdown-gen
-use [react-docgen](https://github.com/reactjs/react-docgen/) extract information from React component, and convert to markdown.
+use [react-docgen](https://github.com/reactjs/react-docgen/) to extract information from React component, and convert to markdown.
 
 ## Install
 
