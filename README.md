@@ -13,10 +13,10 @@ rmd <component_name> <input_file> [output_file]
 ```
 
 ##example
-```
+```sh
 rmd Calendar index.js readme.md
 
-or If no output file exists, information will be printed out on your terminal.
+#or If no output file exists, information will be printed out on your terminal.
 rmd Calendar index.js
 ```
 
