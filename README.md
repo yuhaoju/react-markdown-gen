@@ -16,7 +16,7 @@ rmd <component_name> <input_file> [output_file]
 ```sh
 rmd Calendar index.js readme.md
 
-#or If no output file exists, information will be printed out on your terminal.
+#Or if no output file exists, information will be printed out on your terminal.
 rmd Calendar index.js
 ```
 
