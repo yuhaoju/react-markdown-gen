@@ -1,7 +1,9 @@
 'use strict'
+var VerEx = require('verbal-expressions')
+var fs = require('fs')
 
 function stringOfLength(string, length) {
-    var newString = '';
+    var newString = ''
     for (var i = 0; i < length; i++) {
         newString += string;
     }
@@ -63,11 +65,50 @@ function generateProps(props) {
     );
 }
 
+function generateExample(description) {
+    var exampleLineReg = VerEx()
+        .startOfLine()
+        .anything()
+        .then('@example ')
+        .anythingBut('\n')
+
+    var result = exampleLineReg.exec(description)
+    if(result){
+        var exampleContent = result[0].replace('@example ', ''),
+            examplePath = VerEx().startOfLine().anythingBut('[').exec(exampleContent),
+            exampleLines = VerEx().then('[').word().then('-').word().then(']').exec(exampleContent)
+
+            console.log(examplePath);
+        if(examplePath && exampleLines) {
+            var exampleFile = fs.readFileSync(examplePath[0], {encoding: 'utf8'}),
+                startLineNo = exampleLines[0].split('-')[0].slice(1),
+                endLineNo = exampleLines[0].split('-')[1].slice(0, -1)
+
+            var lines = exampleFile.split('\n'),
+                lineNo = 0,
+                copiedExampleContent = ''
+
+            while(lineNo < lines.length) {
+                if(lineNo >= startLineNo && lineNo < endLineNo) {
+                    copiedExampleContent += lines[lineNo] + '\n'
+                }
+                lineNo ++
+            }
+
+            var exampleTitle = 'Example:'
+            return '\n' + exampleTitle + '\n' + stringOfLength('-', exampleTitle.length) + '\n' + copiedExampleContent
+        }
+    }
+
+    return ''
+}
+
 function generateMarkdown(name, reactAPI) {
     var markdownString =
         generateTitle(name) + '\n' +
         generateDesciption(reactAPI.description) + '\n' +
-        generateProps(reactAPI.props);
+        generateProps(reactAPI.props) + '\n' +
+        generateExample(reactAPI.description);
 
     return markdownString;
 }

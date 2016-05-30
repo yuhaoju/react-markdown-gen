@@ -26,6 +26,7 @@
   "license": "MIT",
   "dependencies": {
     "commander": "^2.9.0",
-    "react-docgen": "^2.7.0"
+    "react-docgen": "^2.7.0",
+    "verbal-expressions": "^0.2.1"
   }
 }
