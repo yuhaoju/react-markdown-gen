@@ -15,7 +15,7 @@ program
             if (err) throw err;
 
             var componentInfo = reactDocs.parse(data)
-            var markdownString = markdown(name, componentInfo)
+            var markdownString = markdown(name, componentInfo, input)
 
             if (typeof output === 'string') {
                 fs.writeFile(output, markdownString, function(err) {

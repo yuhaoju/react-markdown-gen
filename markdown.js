@@ -1,6 +1,7 @@
 'use strict'
 var VerEx = require('verbal-expressions')
 var fs = require('fs')
+var path = require('path')
 
 function stringOfLength(string, length) {
     var newString = ''
@@ -65,7 +66,7 @@ function generateProps(props) {
     );
 }
 
-function generateExample(description) {
+function generateExample(description, componentPath) {
     var exampleLineReg = VerEx()
         .startOfLine()
         .anything()
@@ -75,14 +76,13 @@ function generateExample(description) {
     var result = exampleLineReg.exec(description)
     if(result){
         var exampleContent = result[0].replace('@example ', ''),
-            examplePath = VerEx().startOfLine().anythingBut('[').exec(exampleContent),
-            exampleLines = VerEx().then('[').word().then('-').word().then(']').exec(exampleContent)
+            examplePath = path.resolve(componentPath, VerEx().startOfLine().anythingBut('[').exec(exampleContent)[0]),
+            exampleLines = VerEx().then('[').word().then('-').word().then(']').exec(exampleContent)[0]
 
-            console.log(examplePath);
         if(examplePath && exampleLines) {
-            var exampleFile = fs.readFileSync(examplePath[0], {encoding: 'utf8'}),
-                startLineNo = exampleLines[0].split('-')[0].slice(1),
-                endLineNo = exampleLines[0].split('-')[1].slice(0, -1)
+            var exampleFile = fs.readFileSync(examplePath, {encoding: 'utf8'}),
+                startLineNo = exampleLines.split('-')[0].slice(1),
+                endLineNo = exampleLines.split('-')[1].slice(0, -1)
 
             var lines = exampleFile.split('\n'),
                 lineNo = 0,
@@ -103,12 +103,12 @@ function generateExample(description) {
     return ''
 }
 
-function generateMarkdown(name, reactAPI) {
+function generateMarkdown(name, reactAPI, componentPath) {
     var markdownString =
         generateTitle(name) + '\n' +
         generateDesciption(reactAPI.description) + '\n' +
         generateProps(reactAPI.props) + '\n' +
-        generateExample(reactAPI.description);
+        generateExample(reactAPI.description, path.dirname(componentPath));
 
     return markdownString;
 }
