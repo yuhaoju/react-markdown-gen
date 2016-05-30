@@ -1,6 +1,6 @@
 {
   "name": "react-markdown-gen",
-  "version": "0.0.3",
+  "version": "0.0.5",
   "description": "extract information from React component and convert to markdown",
   "main": "index.js",
   "scripts": {
