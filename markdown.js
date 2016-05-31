@@ -3,6 +3,12 @@ var VerEx = require('verbal-expressions')
 var fs = require('fs')
 var path = require('path')
 
+var exampleLineReg = VerEx()
+    .startOfLine()
+    .anything()
+    .then('@example ')
+    .anythingBut('\n')
+
 function stringOfLength(string, length) {
     var newString = ''
     for (var i = 0; i < length; i++) {
@@ -16,6 +22,7 @@ function generateTitle(name) {
 }
 
 function generateDesciption(description) {
+    description = exampleLineReg.replace(description, '')
     return description ? description + '\n' : '';
 }
 
@@ -46,7 +53,7 @@ function generateProp(propName, prop) {
 
     return (
         propName +
-        '|' + prop.type +
+        '|' + prop.type.replace('|', '\\|') +
         '|' + prop.defaultValue +
         '|' + prop.required +
         '|' + prop.description
@@ -67,12 +74,6 @@ function generateProps(props) {
 }
 
 function generateExample(description, componentPath) {
-    var exampleLineReg = VerEx()
-        .startOfLine()
-        .anything()
-        .then('@example ')
-        .anythingBut('\n')
-
     var result = exampleLineReg.exec(description)
     if(result){
         var exampleContent = result[0].replace('@example ', ''),
@@ -96,7 +97,11 @@ function generateExample(description, componentPath) {
             }
 
             var exampleTitle = 'Example:'
-            return '\n' + exampleTitle + '\n' + stringOfLength('-', exampleTitle.length) + '\n' + copiedExampleContent
+            return '\n' + exampleTitle
+                + '\n' + stringOfLength('-', exampleTitle.length)
+                + '\n' + '```javascript'
+                + '\n' + copiedExampleContent
+                + '\n' + '```'
         }
     }
 
